@@ -1,0 +1,23 @@
+name: Local CI/CD to kind
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t mlops-titanic:latest .
+
+      - name: Load Image into kind
+        run: kind load docker-image mlops-titanic:latest --name mlops-test
+
+      - name: Apply Kubernetes Manifests
+        run: kubectl apply -f k8s/
+

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-inference
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ml
+  template:
+    metadata:
+      labels:
+        app: ml
+    spec:
+      containers:
+      - name: predict-api
+        image: mlops-titanic:v2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+
