@@ -33,4 +33,58 @@ This project is an end-to-end MLOps implementation of a machine learning model t
 
 ## 🗂️ Project Structure
 
+mlops-titanic/
+├── data/
+│ └── titanic.csv # Sample dataset
+├── src/
+│ ├── train.py # Trains and saves model.pkl
+│ └── predict.py # Flask API app
+├── Dockerfile # Container definition
+├── deployment.yaml # Kubernetes Deployment
+├── service.yaml # Kubernetes Service
+└── README.md # This file
 
+
+---
+
+## 🚀 Quickstart
+
+### 1. 🧪 Train the Model
+```bash
+python3 src/train.py
+
+Generates model.pkl.
+
+2. 🐳 Build the Docker Image
+
+docker build -t mlops-titanic:latest .
+
+
+3. 🔁 Deploy to kind Cluster
+
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+
+
+4. 🌐 Port Forward the Service
+
+kubectl port-forward svc/ml-service 8080:80
+
+Now the API is accessible at http://localhost:8080.
+
+
+5. 📤 Make a Prediction
+
+curl -X POST http://localhost:8080/predict \
+  -H "Content-Type: application/json" \
+  -d '{"data": [3, "female", 22, 1, 0, 7.25]}'
+
+✅ Expected response:
+
+{"prediction": 1}
+
+🔍 API Endpoints
+Method	Endpoint	Description
+GET	/	Health check
+POST	/predict	Submit features, get prediction
